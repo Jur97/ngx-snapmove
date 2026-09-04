@@ -59,6 +59,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/ngx-snapmove/",
               "budgets": [
                 {
                   "type": "initial",
