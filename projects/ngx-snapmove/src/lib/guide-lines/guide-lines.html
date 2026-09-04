@@ -1,0 +1,11 @@
+<div class="guides">
+  @for (a of alignments(); track $index) {
+    <div
+      class="guide"
+      [class.guide--x]="a.axis === 'x'"
+      [class.guide--y]="a.axis === 'y'"
+      [style.left.%]="a.axis === 'x' ? a.position : 0"
+      [style.top.%]="a.axis === 'y' ? a.position : 0"
+    ></div>
+  }
+</div>

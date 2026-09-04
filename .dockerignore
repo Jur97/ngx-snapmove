@@ -1,0 +1,10 @@
+node_modules
+npm-debug.log
+.git
+.gitignore
+.angular
+dist
+out-tsc
+.vscode
+.editorconfig
+README.md

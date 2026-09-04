@@ -1,0 +1,188 @@
+:host {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  display: block;
+  height: 100dvh;
+  background: #fafafa;
+}
+
+.test-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 2rem;
+  gap: 2rem;
+}
+
+.header {
+  text-align: center;
+}
+
+.header h1 {
+  font-size: 2rem;
+  margin: 0 0 0.5rem;
+  color: #333;
+}
+
+.header p {
+  margin: 0;
+  color: #666;
+}
+
+.content {
+  display: flex;
+  gap: 2rem;
+  flex: 1;
+}
+
+.canvas-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bounds-container {
+  width: 600px;
+  height: 400px;
+  border: 3px solid #007bff;
+  position: relative;
+  background: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.draggable-element {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  user-select: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+  font-weight: 600;
+  transition: box-shadow 0.2s ease;
+}
+
+.draggable-element:active {
+  cursor: grabbing;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.5);
+}
+
+.drag-indicator {
+  font-size: 0.9rem;
+}
+
+.debug-section {
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.debug-panel,
+.history-panel {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.debug-panel h2,
+.history-panel h2 {
+  font-size: 1rem;
+  margin: 0 0 1rem;
+  color: #333;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.info-row strong {
+  color: #666;
+  min-width: 120px;
+}
+
+.info-row code {
+  background: #f5f5f5;
+  padding: 0.25rem 0.5rem;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+}
+
+.info-row span {
+  font-weight: 600;
+}
+
+.info-row span.dragging {
+  color: #dc3545;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.history-header h2 {
+  margin: 0;
+}
+
+.clear-btn {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.clear-btn:hover {
+  background: #5a6268;
+}
+
+.history-list {
+  max-height: 250px;
+  overflow-y: auto;
+  font-size: 0.85rem;
+  font-family: 'Courier New', monospace;
+}
+
+.history-item {
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  background: #f8f9fa;
+  border-left: 3px solid #007bff;
+  border-radius: 2px;
+  word-break: break-all;
+}
+
+.empty {
+  text-align: center;
+  color: #999;
+  padding: 1rem 0;
+  font-style: italic;
+}
+
+@media (max-width: 1200px) {
+  .content {
+    flex-direction: column;
+  }
+
+  .debug-section {
+    width: 100%;
+  }
+
+  .bounds-container {
+    width: 100%;
+    max-width: 500px;
+  }
+}

@@ -1,0 +1,110 @@
+<div class="test-container">
+  <div class="header">
+    <h1>🚀 Draggable Directives Test</h1>
+    <p>Drag the blue box within the bounds container</p>
+  </div>
+
+  <div class="content">
+    <div class="canvas-section">
+      <div class="bounds-container" jurBounds [enableSnap]="true">
+        <div
+          class="draggable-element"
+          jurElement
+          [x]="10"
+          [y]="10"
+          [width]="30"
+          [height]="40"
+          jurDraggable
+          jurResizable
+          [keepRatio]="true"
+          [step]="10"
+          (onDragStart)="onDragStart($event)"
+          (dragMove)="onDragMove($event)"
+          (onDragEnd)="onDragEnd($event)"
+        >
+          <span class="drag-indicator">{{ isDragging() ? '✋ Dragging' : '👆 Drag me' }}</span>
+        </div>
+        <div
+          class="draggable-element"
+          jurElement
+          jurDraggable
+          [x]="20"
+          [y]="40"
+          [width]="20"
+          [height]="10"
+        >
+          <span class="drag-indicator">{{ 'Hello' }}</span>
+        </div>
+        <div
+          class="draggable-element"
+          jurElement
+          [x]="30"
+          [y]="10"
+          [width]="20"
+          [height]="10"
+          jurDraggable
+          jurResizable
+          [resizeHandles]="['ne', 'sw']"
+          [step]="10"
+          (onDragStart)="onDragStart($event)"
+          (dragMove)="onDragMove($event)"
+          (onDragEnd)="onDragEnd($event)"
+        >
+          <span class="drag-indicator">Test</span>
+        </div>
+        <div
+          class="draggable-element"
+          jurElement
+          [x]="30"
+          [y]="10"
+          [width]="20"
+          [height]="10"
+          jurDraggable
+          jurResizable
+          [step]="10"
+          (onDragStart)="onDragStart($event)"
+          (dragMove)="onDragMove($event)"
+          (onDragEnd)="onDragEnd($event)"
+        >
+          <span class="drag-indicator">Test 2</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="debug-section">
+      <div class="debug-panel">
+        <h2>📊 Debug Info</h2>
+        <div class="info-row">
+          <strong>Status:</strong>
+          <span [class.dragging]="isDragging()">
+            {{ isDragging() ? '🔴 DRAGGING' : '⚪ IDLE' }}
+          </span>
+        </div>
+        <div class="info-row">
+          <strong>Current Position:</strong>
+          <code>x: {{ currentPos().x.toFixed(2) }}%, y: {{ currentPos().y.toFixed(2) }}%</code>
+        </div>
+        <div class="info-row">
+          <strong>Element Rect:</strong>
+          <code>{{ elementRect() | json }}</code>
+        </div>
+      </div>
+
+      <div class="history-panel">
+        <div class="history-header">
+          <h2>📝 Event History</h2>
+          <button (click)="clearHistory()" class="clear-btn">Clear</button>
+        </div>
+        <div class="history-list">
+          @if (dragHistory().length === 0) {
+            <p class="empty">No events yet...</p>
+          } @else {
+            @for (event of dragHistory(); track $index) {
+              <div class="history-item">{{ event }}</div>
+            }
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
