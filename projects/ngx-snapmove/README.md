@@ -2,6 +2,10 @@
 
 A modern Angular library for interactive element positioning with pixel-perfect grid snapping, automatic alignment detection, and visual guide lines. Built with Angular signals and standalone components for maximum flexibility.
 
+🔗 **[Live Demo](https://jur97.github.io/ngx-snapmove/)**
+
+![ngx-snapmove Demo](./demo.png)
+
 ## Features
 
 ✨ **Pixel-Based Grid Snapping** — Snap draggable and resizable elements to a configurable grid step  
@@ -9,7 +13,6 @@ A modern Angular library for interactive element positioning with pixel-perfect 
 📏 **Visual Guide Lines** — Real-time feedback showing active alignments  
 🔄 **Resize Handles** — 8-point resize with directional edge snapping  
 📍 **Percentage-Based Coordinates** — All positioning relative to container bounds for responsive layouts  
-🎛️ **Service Hub Architecture** — Clean, composable API via BoundsService for element coordination  
 ⚡ **Signals-First** — Built on Angular signals and computed for reactive, efficient updates
 
 ## Installation
@@ -141,7 +144,7 @@ Adds drag capability with pointer events, grid snapping, and alignment detection
 
 **Inputs:**
 
-- `step: number` (default: `1`) — Grid step in pixels. Position snaps to multiples of this value.
+- `step: number` (default: `undefined`) — Grid step in pixels. Position snaps to multiples of this value. Snapping is disabled when not set.
 
 **Outputs:**
 
@@ -157,7 +160,7 @@ Adds resize capability with 8 handles and directional edge snapping.
 
 **Inputs:**
 
-- `step: number` (default: `1`) — Grid step in pixels. Size/position snaps to multiples of this value.
+- `step: number` (default: `undefined`) — Grid step in pixels. Size/position snaps to multiples of this value. Snapping is disabled when not set.
 
 **Outputs:**
 
@@ -257,19 +260,19 @@ Emitted during resize operations.
 
 ```typescript
 interface ResizeStartEvent {
-  position: UiRect;
+  rect: UiRect;
   handle: 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw';
   pointerEvent: PointerEvent;
 }
 
 interface ResizeMoveEvent {
-  position: UiRect;
+  rect: UiRect;
   handle: 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw';
   pointerEvent: PointerEvent;
 }
 
 interface ResizeEndEvent {
-  position: UiRect;
+  rect: UiRect;
   handle: 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw';
   pointerEvent: PointerEvent;
 }
@@ -297,10 +300,11 @@ Grid snapping aligns drag/resize operations to a pixel-based step:
 
 **How it works:**
 
-1. Pointer move position is converted to pixels
-2. Position is rounded to nearest multiple of `step`
-3. Result is snapped to container bounds
-4. Final position is converted back to percentage
+1. Pointer delta is converted to a new element position in percentage
+2. The percentage is converted to pixels using container dimensions
+3. Position is rounded to the nearest multiple of `step` pixels
+4. Result is clamped to container bounds
+5. Final pixel value is converted back to percentage
 
 ## Alignment Detection
 
@@ -322,35 +326,6 @@ The library uses a **service hub pattern**:
 5. **GuideLines component** — Reactive component showing active alignments
 
 All communication flows through BoundsService's `alignments` signal.
-
-## Building & Publishing
-
-### Build the library
-
-```bash
-ng build space
-```
-
-Build artifacts go to `dist/jur/space`.
-
-### Publish to npm
-
-```bash
-cd dist/jur/space
-npm publish
-```
-
-## Testing
-
-```bash
-ng test
-```
-
-## Browser Support
-
-- Chrome/Edge 90+
-- Firefox 88+
-- Safari 14+
 
 ## License
 

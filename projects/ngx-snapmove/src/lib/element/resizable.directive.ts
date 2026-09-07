@@ -164,7 +164,7 @@ export class ResizableDirective implements AfterViewInit {
 
     if (currentRect && this.activeHandle) {
       this.onResizeStart.emit({
-        position: currentRect,
+        rect: currentRect,
         handle: this.activeHandle,
         pointerEvent: event,
       });
@@ -196,7 +196,7 @@ export class ResizableDirective implements AfterViewInit {
 
       if (this.activeHandle) {
         this.resizeMove.emit({
-          position: snappedRect,
+          rect: snappedRect,
           handle: this.activeHandle,
           pointerEvent: event,
         });
@@ -208,7 +208,7 @@ export class ResizableDirective implements AfterViewInit {
     if (this.isResizing && event.pointerId === this.pointerId && this.activeHandle) {
       this.isResizing = false;
       const newRect = this.calculateConstrainedSize(event, this.activeHandle);
-      this.onResizeEnd.emit({ position: newRect, handle: this.activeHandle, pointerEvent: event });
+      this.onResizeEnd.emit({ rect: newRect, handle: this.activeHandle, pointerEvent: event });
 
       // Release pointer capture and clean up listeners
       try {

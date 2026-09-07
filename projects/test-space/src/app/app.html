@@ -1,7 +1,7 @@
 <div class="test-container">
   <div class="header">
-    <h1>🚀 Draggable Directives Test</h1>
-    <p>Drag the blue box within the bounds container</p>
+    <h1>🚀 ngx-snapmove Playground</h1>
+    <p>Interactive element positioning with grid snapping and alignment detection</p>
   </div>
 
   <div class="content">
@@ -17,10 +17,12 @@
           jurDraggable
           jurResizable
           [keepRatio]="true"
-          [step]="10"
+          [step]="step()"
           (onDragStart)="onDragStart($event)"
           (dragMove)="onDragMove($event)"
           (onDragEnd)="onDragEnd($event)"
+          (onResizeStart)="onResizeStart($event)"
+          (onResizeEnd)="onResizeEnd($event)"
         >
           <span class="drag-indicator">{{ isDragging() ? '✋ Dragging' : '👆 Drag me' }}</span>
         </div>
@@ -29,42 +31,47 @@
           jurElement
           jurDraggable
           [x]="20"
-          [y]="40"
+          [y]="70"
           [width]="20"
           [height]="10"
+          [step]="step()"
         >
           <span class="drag-indicator">{{ 'Hello' }}</span>
         </div>
         <div
           class="draggable-element"
           jurElement
-          [x]="30"
-          [y]="10"
+          [x]="50"
+          [y]="50"
           [width]="20"
           [height]="10"
           jurDraggable
           jurResizable
           [resizeHandles]="['ne', 'sw']"
-          [step]="10"
+          [step]="step()"
           (onDragStart)="onDragStart($event)"
           (dragMove)="onDragMove($event)"
           (onDragEnd)="onDragEnd($event)"
+          (onResizeStart)="onResizeStart($event)"
+          (onResizeEnd)="onResizeEnd($event)"
         >
           <span class="drag-indicator">Test</span>
         </div>
         <div
           class="draggable-element"
           jurElement
-          [x]="30"
+          [x]="60"
           [y]="10"
           [width]="20"
           [height]="10"
           jurDraggable
           jurResizable
-          [step]="10"
+          [step]="step()"
           (onDragStart)="onDragStart($event)"
           (dragMove)="onDragMove($event)"
           (onDragEnd)="onDragEnd($event)"
+          (onResizeStart)="onResizeStart($event)"
+          (onResizeEnd)="onResizeEnd($event)"
         >
           <span class="drag-indicator">Test 2</span>
         </div>
@@ -72,6 +79,21 @@
     </div>
 
     <div class="debug-section">
+      <div class="debug-panel">
+        <h2>⚙️ Configuration</h2>
+        <div class="info-row">
+          <strong>Grid Step:</strong>
+          <input
+            type="number"
+            [value]="step()"
+            (change)="updateStep($event)"
+            min="1"
+            max="50"
+            class="step-input"
+          />
+        </div>
+      </div>
+
       <div class="debug-panel">
         <h2>📊 Debug Info</h2>
         <div class="info-row">

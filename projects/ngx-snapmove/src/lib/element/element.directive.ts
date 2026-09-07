@@ -58,8 +58,8 @@ export class ElementDirective implements OnInit, OnDestroy {
   }
 
   updateRect(rect: UiRect): void {
-    this.internalRect.set(rect); // Track internal state
-    this.applyRect(rect); // Update DOM
+    this.internalRect.set(rect);
+    this.applyRect(rect);
   }
 
   getCurrentRect(): UiRect {
