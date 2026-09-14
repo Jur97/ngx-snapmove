@@ -43,7 +43,6 @@ export class AlignmentService {
       this.checkPairs(xPairs, 'x', snapThresholdX, other, alignmentMap, draggableRect);
       this.checkPairs(yPairs, 'y', snapThresholdY, other, alignmentMap, draggableRect);
     }
-    console.log('AlignmentService.detectAlignments:', Array.from(alignmentMap.values()));
     return Array.from(alignmentMap.values());
   }
 

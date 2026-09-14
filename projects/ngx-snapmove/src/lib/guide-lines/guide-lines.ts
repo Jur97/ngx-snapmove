@@ -3,6 +3,7 @@ import { BoundsService } from '../shared/services/bounds.service';
 
 @Component({
   selector: 'lib-guide-lines',
+  standalone: true,
   imports: [],
   templateUrl: './guide-lines.html',
   styleUrl: './guide-lines.css',

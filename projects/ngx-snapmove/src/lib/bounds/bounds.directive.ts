@@ -25,7 +25,7 @@ export class BoundsDirective implements AfterViewInit, OnDestroy {
   enableSnap = input<boolean>(true);
   readonly boundsService = inject(BoundsService);
 
-  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly injector = inject(Injector);
   private readonly envInjector = inject(EnvironmentInjector);
   private readonly appRef = inject(ApplicationRef);
@@ -43,14 +43,13 @@ export class BoundsDirective implements AfterViewInit, OnDestroy {
     this.resizeObserver.observe(element);
 
     if (this.enableSnap()) {
-      // elementInjector gives GuideLines access to the directive-scoped BoundsService
       this.guideLines = createComponent(GuideLines, {
         environmentInjector: this.envInjector,
         elementInjector: this.injector,
       });
-      element.appendChild(this.guideLines.location.nativeElement);
-      // Attach to change detection tree so signals update the view reactively
+      // Attach to change detection first, then append to DOM
       this.appRef.attachView(this.guideLines.hostView);
+      element.appendChild(this.guideLines.location.nativeElement);
     }
   }
 
