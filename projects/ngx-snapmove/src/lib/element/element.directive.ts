@@ -32,7 +32,7 @@ export class ElementDirective implements OnInit, OnDestroy {
   readonly width = input<number>(0);
   readonly height = input<number>(0);
 
-  readonly uiRect = computed(() => ({
+  private readonly uiRect = computed(() => ({
     x: this.x(),
     y: this.y(),
     width: this.width(),
@@ -42,11 +42,22 @@ export class ElementDirective implements OnInit, OnDestroy {
   private internalRect = signal<UiRect>({ x: 0, y: 0, width: 0, height: 0 });
 
   constructor() {
-    effect(() => {
-      const rect = this.uiRect();
-      this.internalRect.set(rect);
-      this.applyRect(rect);
-    });
+    // effect(() => {
+    //   const rect = this.uiRect();
+    //   this.internalRect.set(rect);
+    //   this.applyRect(rect);
+    // });
+  }
+
+  ngOnInit(): void {
+    this.internalRect.set(this.uiRect());
+    this.applyRect(this.uiRect());
+    this.boundsService.registerElement(this);
+  }
+
+  public refresh(): void {
+    this.internalRect.set(this.uiRect());
+    this.applyRect(this.uiRect());
   }
 
   private applyRect(rect: UiRect): void {
@@ -64,10 +75,6 @@ export class ElementDirective implements OnInit, OnDestroy {
 
   getCurrentRect(): UiRect {
     return this.internalRect();
-  }
-
-  ngOnInit(): void {
-    this.boundsService.registerElement(this);
   }
 
   ngOnDestroy(): void {

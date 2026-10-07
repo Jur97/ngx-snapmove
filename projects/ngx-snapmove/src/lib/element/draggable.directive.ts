@@ -1,8 +1,9 @@
-import { Directive, ElementRef, inject, output, input } from '@angular/core';
+import { Directive, ElementRef, inject, output, input, Optional } from '@angular/core';
 import { AlignmentService } from '../shared/services/alignment.service';
 import { BoundsService } from '../shared/services/bounds.service';
 import type { PercentPoint } from '../shared/models/percent-point';
 import { ElementDirective } from './element.directive';
+import { ResizableDirective } from './resizable.directive';
 import { DragEndEvent, DragMoveEvent, DragStartEvent } from '../shared/models/drag-events';
 
 @Directive({
@@ -16,6 +17,7 @@ export class DraggableDirective {
   private readonly element = inject(ElementDirective);
   private readonly boundsService = inject(BoundsService);
   private readonly alignmentService = inject(AlignmentService);
+  private readonly resizable = inject(ResizableDirective, { optional: true });
 
   readonly onDragStart = output<DragStartEvent>();
   readonly dragMove = output<DragMoveEvent>();
@@ -30,9 +32,7 @@ export class DraggableDirective {
   private initialElementRect: DOMRect | null = null;
 
   onPointerDown(event: PointerEvent): void {
-    // Skip drag if clicking on a resize handle
-    const target = event.target as HTMLElement;
-    if (target.hasAttribute('data-resize-handle')) {
+    if (this.resizable?.isResizing) {
       return;
     }
 

@@ -33,7 +33,7 @@ export class ResizableDirective implements AfterViewInit {
   readonly resizeMove = output<ResizeMoveEvent>();
   readonly onResizeEnd = output<ResizeEndEvent>();
 
-  private isResizing = false;
+  isResizing = false;
   private initialPointerX = 0;
   private initialPointerY = 0;
   private pointerId: number | null = null;
@@ -295,60 +295,49 @@ export class ResizableDirective implements AfterViewInit {
       newHeight = this.initialElementRect.height + deltaPercentY;
     }
 
-    // 3. ASPECT RATIO CONSTRAINT - GOES HERE
-    // Now you have newWidth/newHeight from the pointer delta
-    // Apply aspect ratio to maintain proportions
+    // Apply position/bounds constraints first
+    newX = Math.max(0, newX);
+    newY = Math.max(0, newY);
+
     if (this.keepRatio() && this.initialAspectRatio) {
+      const ratio = this.initialAspectRatio;
+      const maxWidth = 100 - newX;
+      const maxHeight = 100 - newY;
+
       if (handle === 'n' || handle === 's') {
-        // Vertical only: width follows height
-        newWidth = newHeight * this.initialAspectRatio;
+        newHeight = Math.min(newHeight, maxHeight);
+        newWidth = Math.min(newHeight * ratio, maxWidth);
+        newHeight = newWidth / ratio;
       } else if (handle === 'e' || handle === 'w') {
-        // Horizontal only: height follows width
-        newHeight = newWidth / this.initialAspectRatio;
+        newWidth = Math.min(newWidth, maxWidth);
+        newHeight = Math.min(newWidth / ratio, maxHeight);
+        newWidth = newHeight * ratio;
       } else {
-        // Corners: prioritize horizontal, height follows
-        newHeight = newWidth / this.initialAspectRatio;
+        // Corners: clamp both, then let the more-constrained axis drive
+        newWidth = Math.min(newWidth, maxWidth);
+        newHeight = Math.min(newHeight, maxHeight);
+        if (newWidth / ratio <= newHeight) {
+          newHeight = newWidth / ratio;
+        } else {
+          newWidth = newHeight * ratio;
+        }
+      }
+
+      // Re-anchor x for w handles: right edge must stay fixed after ratio adjustment
+      if (handle.includes('w')) {
+        newX = this.initialElementRect.x + this.initialElementRect.width - newWidth;
+        newX = Math.max(0, newX);
+      }
+      // Re-anchor y for n handles: bottom edge must stay fixed after ratio adjustment
+      if (handle.includes('n')) {
+        newY = this.initialElementRect.y + this.initialElementRect.height - newHeight;
+        newY = Math.max(0, newY);
       }
     }
 
-    // Minimum size constraints (10% of bounds)
-    const minWidth = 10;
-    const minHeight = 10;
-    // newWidth = Math.max(minWidth, newWidth);
-    // newHeight = Math.max(minHeight, newHeight);
-
-    // Maximum constraints: position must be >= 0 and element must stay within bounds
-    newX = Math.max(0, newX);
-    newY = Math.max(0, newY);
+    // Final bounds constraints
     newWidth = Math.min(newWidth, 100 - newX);
     newHeight = Math.min(newHeight, 100 - newY);
-
-    // if (this.keepRatio() && this.initialAspectRatio) {
-    //   if (handle === 'n' || handle === 's') {
-    //     // For vertical-only: height is primary, width follows
-    //     newWidth = newHeight * this.initialAspectRatio;
-    //     // But newWidth might now exceed bounds, so constrain it
-    //     if (newWidth > 100 - newX) {
-    //       newWidth = 100 - newX;
-    //       newHeight = newWidth / this.initialAspectRatio;
-    //     }
-    //   } else if (handle === 'e' || handle === 'w') {
-    //     // For horizontal-only: width is primary, height follows
-    //     newHeight = newWidth / this.initialAspectRatio;
-    //     // But newHeight might now exceed bounds, so constrain it
-    //     if (newHeight > 100 - newY) {
-    //       newHeight = 100 - newY;
-    //       newWidth = newHeight * this.initialAspectRatio;
-    //     }
-    //   } else {
-    //     // For corners: width is primary
-    //     newHeight = newWidth / this.initialAspectRatio;
-    //     if (newHeight > 100 - newY) {
-    //       newHeight = 100 - newY;
-    //       newWidth = newHeight * this.initialAspectRatio;
-    //     }
-    //   }
-    // }
 
     const stepSize = this.step();
     if (stepSize) {
@@ -382,18 +371,18 @@ export class ResizableDirective implements AfterViewInit {
   }
 }
 
-@Directive({
-  selector: '[jurResizeHandle]',
-  host: {
-    '(pointerdown)': 'onPointerDown($event)',
-  },
-})
-export class ResizeHandleDirective {
-  private readonly elementRef = inject(ElementRef<HTMLElement>);
-  private readonly resizable = inject(ResizableDirective);
+// @Directive({
+//   selector: '[jurResizeHandle]',
+//   host: {
+//     '(pointerdown)': 'onPointerDown($event)',
+//   },
+// })
+// export class ResizeHandleDirective {
+//   private readonly elementRef = inject(ElementRef<HTMLElement>);
+//   private readonly resizable = inject(ResizableDirective);
 
-  onPointerDown(event: PointerEvent): void {
-    event.stopPropagation();
-    this.resizable.startResize(event);
-  }
-}
+//   onPointerDown(event: PointerEvent): void {
+//     event.stopPropagation();
+//     this.resizable.startResize(event);
+//   }
+// }
