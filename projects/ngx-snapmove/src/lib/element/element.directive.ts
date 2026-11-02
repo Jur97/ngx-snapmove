@@ -41,13 +41,7 @@ export class ElementDirective implements OnInit, OnDestroy {
 
   private internalRect = signal<UiRect>({ x: 0, y: 0, width: 0, height: 0 });
 
-  constructor() {
-    // effect(() => {
-    //   const rect = this.uiRect();
-    //   this.internalRect.set(rect);
-    //   this.applyRect(rect);
-    // });
-  }
+  constructor() {}
 
   ngOnInit(): void {
     this.internalRect.set(this.uiRect());

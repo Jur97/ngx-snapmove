@@ -43,6 +43,23 @@ export class AlignmentService {
       this.checkPairs(xPairs, 'x', snapThresholdX, other, alignmentMap, draggableRect);
       this.checkPairs(yPairs, 'y', snapThresholdY, other, alignmentMap, draggableRect);
     }
+
+    this.checkPairs(
+      [[drag.center, 'center', 50]],
+      'x',
+      snapThresholdX,
+      null,
+      alignmentMap,
+      draggableRect,
+    );
+    this.checkPairs(
+      [[drag.middle, 'middle', 50]],
+      'y',
+      snapThresholdY,
+      null,
+      alignmentMap,
+      draggableRect,
+    );
     return Array.from(alignmentMap.values());
   }
 
@@ -50,7 +67,7 @@ export class AlignmentService {
     pairs: [number, AlignType, number][],
     axis: AlignAxis,
     threshold: number,
-    other: ElementDirective,
+    other: ElementDirective | null,
     map: Map<string, Alignment>,
     draggableRect: UiRect,
   ): void {
@@ -66,9 +83,15 @@ export class AlignmentService {
       const key = `${axis}-${dragEdgeType}-${otherEdge.toFixed(3)}`;
       const existing = map.get(key);
       if (existing) {
-        existing.elements.push(other);
+        if (other) existing.elements.push(other);
       } else {
-        map.set(key, { axis, dragEdgeType, position: otherEdge, elements: [other], snapTo });
+        map.set(key, {
+          axis,
+          dragEdgeType,
+          position: otherEdge,
+          elements: other ? [other] : [],
+          snapTo,
+        });
       }
     }
   }

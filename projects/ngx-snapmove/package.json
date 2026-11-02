@@ -1,7 +1,7 @@
 {
   "name": "ngx-snapmove",
   "author": "Jur van der Velden",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Angular library for dragging / resizing and snapping elements in a container.",
   "keywords": [
     "Angular",

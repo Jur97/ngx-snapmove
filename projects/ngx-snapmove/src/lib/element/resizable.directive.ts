@@ -370,19 +370,3 @@ export class ResizableDirective implements AfterViewInit {
     return Math.max(0, Math.min((snappedPixels / boundsSize) * 100, max));
   }
 }
-
-// @Directive({
-//   selector: '[jurResizeHandle]',
-//   host: {
-//     '(pointerdown)': 'onPointerDown($event)',
-//   },
-// })
-// export class ResizeHandleDirective {
-//   private readonly elementRef = inject(ElementRef<HTMLElement>);
-//   private readonly resizable = inject(ResizableDirective);
-
-//   onPointerDown(event: PointerEvent): void {
-//     event.stopPropagation();
-//     this.resizable.startResize(event);
-//   }
-// }
